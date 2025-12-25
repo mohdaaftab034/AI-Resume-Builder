@@ -1,86 +1,127 @@
-import React from 'react'
+import React from 'react';
+import { Dribbble, Github, Linkedin, Mail, Send, Twitter } from 'lucide-react';
 
 const Footer = () => {
     return (
-        <>
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-            
-                * {
-                    font-family: 'Poppins', sans-serif;
-                }
-            `}</style>
+        <footer className="relative bg-slate-50 pt-20 pb-10 overflow-hidden border-t border-slate-200">
 
-            <footer className="flex flex-wrap justify-center lg:justify-between overflow-hidden gap-10 md:gap-20 py-16 px-6 md:px-16 lg:px-24 xl:px-32 text-[13px] text-gray-500 mt-40 bg-gradient-to-r from-white via-green-200/60 to-white ">
-                <div className="flex flex-wrap items-start gap-10 md:gap-[60px] xl:gap-[140px]">
-                    <a href="#">
-                        <img src="/logo.svg" alt="logo" className='h-11 w-auto' />
-                    </a>
-                    <div>
-                        <p className="text-slate-800 font-semibold">Product</p>
-                        <ul className="mt-2 space-y-2">
-                            <li><a href="/" className="hover:text-green-600 transition">Home</a></li>
-                            <li><a href="/" className="hover:text-green-600 transition">Support</a></li>
-                            <li><a href="/" className="hover:text-green-600 transition">Pricing</a></li>
-                            <li><a href="/" className="hover:text-green-600 transition">Affiliate</a></li>
+            {/* Background Pattern (Consistent with Hero) */}
+            <div className="absolute inset-0 z-0 opacity-40 pointer-events-none">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+            </div>
+
+            <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
+
+                {/* Top Section: Newsletter CTA */}
+                <div className="bg-slate-900 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl shadow-slate-200 mb-20">
+                    <div className="space-y-2 text-center md:text-left">
+                        <h3 className="text-2xl md:text-3xl font-bold text-white">Ready to build your future?</h3>
+                        <p className="text-slate-400">Join 10,000+ users building professional resumes today.</p>
+                    </div>
+                    <div className="flex w-full max-w-md bg-white/10 p-1.5 rounded-full border border-white/10 backdrop-blur-sm focus-within:bg-white/20 transition-colors">
+                        <input
+                            type="email"
+                            placeholder="Enter your email"
+                            className="flex-1 bg-transparent px-4 py-2 text-white placeholder:text-slate-400 outline-none w-full"
+                        />
+                        <button className="bg-green-500 hover:bg-green-400 text-slate-900 font-semibold px-6 py-2 rounded-full transition-all flex items-center gap-2 group">
+                            <span>Join</span>
+                            <Send className="size-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Main Footer Content */}
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16">
+
+                    {/* Brand Column */}
+                    <div className="col-span-2 lg:col-span-2 space-y-6">
+                        <a href="/" className="inline-block">
+                            <img src="/logo.png" alt="Resumefy" className='h-9 w-auto' />
+                        </a>
+                        <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
+                            Resumefy helps you create professional, ATS-friendly resumes in minutes using the power of AI. Land your dream job faster.
+                        </p>
+                        <div className="flex gap-4">
+                            {[
+                                { icon: Twitter, href: "https://twitter.com" },
+                                { icon: Linkedin, href: "https://www.linkedin.com/in/aaftab-670888333?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BeNXTuXC5QHKUz2obeLD67g%3D%3D" },
+                                { icon: Dribbble, href: "https://aaftab-wine.vercel.app" },
+                                { icon: Github, href: "https://github.com/mohdaaftab034" }
+                            ].map((Social, index) => (
+                                <a
+                                    key={index}
+                                    href={Social.href}
+                                    className="size-10 flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-500 hover:text-white hover:bg-slate-900 hover:border-slate-900 transition-all duration-300 hover:-translate-y-1 shadow-sm"
+                                >
+                                    <Social.icon className="size-4" />
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Links Columns */}
+                    <div className="space-y-6">
+                        <h4 className="font-bold text-slate-900">Product</h4>
+                        <ul className="space-y-4 text-sm text-slate-500">
+                            {['Features', 'Templates', 'Pricing', 'AI Writer', 'ATS Check'].map((item) => (
+                                <li key={item}>
+                                    <a href="#" className="hover:text-green-600 transition-colors hover:translate-x-1 inline-block duration-200">{item}</a>
+                                </li>
+                            ))}
                         </ul>
                     </div>
-                    <div>
-                        <p className="text-slate-800 font-semibold">Resources</p>
-                        <ul className="mt-2 space-y-2">
-                            <li><a href="/" className="hover:text-green-600 transition">Company</a></li>
-                            <li><a href="/" className="hover:text-green-600 transition">Blogs</a></li>
-                            <li><a href="/" className="hover:text-green-600 transition">Community</a></li>
-                            <li><a href="/" className="hover:text-green-600 transition">Careers<span className="text-xs text-white bg-green-600 rounded-md ml-2 px-2 py-1">We’re hiring!</span></a></li>
-                            <li><a href="/" className="hover:text-green-600 transition">About</a></li>
+
+                    <div className="space-y-6">
+                        <h4 className="font-bold text-slate-900">Resources</h4>
+                        <ul className="space-y-4 text-sm text-slate-500">
+                            {['Blog', 'Career Advice', 'Community', 'Help Center'].map((item) => (
+                                <li key={item}>
+                                    <a href="#" className="hover:text-green-600 transition-colors hover:translate-x-1 inline-block duration-200">{item}</a>
+                                </li>
+                            ))}
+                            <li>
+                                <a href="#" className="hover:text-green-600 transition-colors hover:translate-x-1 inline-flex items-center gap-2 duration-200">
+                                    Partners
+                                    <span className="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">New</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
-                    <div>
-                        <p className="text-slate-800 font-semibold">Legal</p>
-                        <ul className="mt-2 space-y-2">
-                            <li><a href="/" className="hover:text-green-600 transition">Privacy</a></li>
-                            <li><a href="/" className="hover:text-green-600 transition">Terms</a></li>
+
+                    <div className="space-y-6">
+                        <h4 className="font-bold text-slate-900">Company</h4>
+                        <ul className="space-y-4 text-sm text-slate-500">
+                            {['About Us', 'Careers', 'Privacy Policy', 'Terms of Service'].map((item) => (
+                                <li key={item}>
+                                    <a href="#" className="hover:text-green-600 transition-colors hover:translate-x-1 inline-block duration-200">{item}</a>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </div>
-                <div className="flex flex-col max-md:items-center max-md:text-center gap-2 items-end">
-                    <p className="max-w-60">Making every customer feel valued—no matter the size of your audience.</p>
-                    <div className="flex items-center gap-4 mt-3">
-                        <a href="https://dribbble.com/prebuiltui" target="_blank" rel="noreferrer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-dribbble size-5 hover:text-green-500" aria-hidden="true">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94"></path>
-                                <path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32"></path>
-                                <path d="M8.56 2.75c4.37 6 6 9.42 8 17.72"></path>
-                            </svg>
-                        </a>
-                        <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin size-5 hover:text-green-500" aria-hidden="true">
-                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                                <rect width="4" height="12" x="2" y="9"></rect>
-                                <circle cx="4" cy="4" r="2"></circle>
-                            </svg>
-                        </a>
-                        <a href="https://x.com" target="_blank" rel="noreferrer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-twitter size-5 hover:text-green-500" aria-hidden="true">
-                                <path
-                                    d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z">
-                                </path>
-                            </svg>
-                        </a>
-                        <a href="https://www.youtube.com" target="_blank" rel="noreferrer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-youtube size-6 hover:text-green-500" aria-hidden="true">
-                                <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17">
-                                </path>
-                                <path d="m10 15 5-3-5-3z"></path>
-                            </svg>
+
+                {/* Bottom Bar */}
+                <div className="pt-8 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+                    <p>© 2025 Resumefy build by MOHD AAFTAB</p>
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                            <span className="size-2 rounded-full bg-green-500 animate-pulse"></span>
+                            <span>All Systems Operational</span>
+                        </div>
+                        <a href="mailto:support@resumefy.com" className="flex items-center gap-2 hover:text-slate-600 transition-colors">
+                            <Mail className="size-4" /> Support
                         </a>
                     </div>
-                    <p className="mt-3 text-center">© 2025 <a href="https://prebuiltui.com">Resume Builder</a></p>
                 </div>
-            </footer>
-        </>
+            </div>
+
+            <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+                * { font-family: 'Poppins', sans-serif; }
+            `}</style>
+        </footer>
     );
 }
 
-export default Footer
+export default Footer;

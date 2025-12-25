@@ -1,60 +1,92 @@
 import React from 'react'
-import {Zap} from 'lucide-react'
+import { Zap, Activity, ShieldCheck, FileBarChart } from 'lucide-react' // Assuming you have these
 import Title from './Title';
 
 const Features = () => {
-
-    const [isHover, setIsHover] = React.useState(false);
+    // Determine which card is "active" based on hover
+    const [hoveredIndex, setHoveredIndex] = React.useState(null);
 
     return (
-        <div id='features' className='flex flex-col items-center my-10 scroll-mt-12'>
+        <div id='features' className='relative py-20 px-6 max-w-7xl mx-auto scroll-mt-24'>
 
-            <div className="flex items-center gap-2 text-sm text-green-600 bg-green-400/10 rounded-full px-6 py-1.5">
-                <Zap width={14} />
-                <span>Simple Process</span>
-            </div>
-
-            <Title title='Build your resume' description='Our streamlined process helps you create a professional resume in minutes with intelligent AI-powered tools and features' />
-
-            <div className="flex flex-col md:flex-row items-center xl:-mt-10">
-                <img className="max-w-2xl w-full xl:-ml-32" src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/group-image-1.png" alt="" />
-                <div className="px-4 md:px-0" onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
-                    <div className={"flex items-center justify-center gap-6 max-w-md group cursor-pointer"}>
-                        <div className={`p-6 group-hover:bg-violet-100 border border-transparent group-hover:border-violet-300  flex gap-4 rounded-xl transition-colors ${!isHover ? 'border-violet-300 bg-violet-100' : ''}`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-6 stroke-violet-600"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" /><circle cx="16.5" cy="7.5" r=".5" fill="currentColor" /></svg>
-                            <div className="space-y-2">
-                                <h3 className="text-base font-semibold text-slate-700">Real-Time Analytics</h3>
-                                <p className="text-sm text-slate-600 max-w-xs">Get instant insights into your finances with live dashboards.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex items-center justify-center gap-6 max-w-md group cursor-pointer">
-                        <div className="p-6 group-hover:bg-green-100 border border-transparent group-hover:border-green-300 flex gap-4 rounded-xl transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-6 stroke-green-600"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" /></svg>
-                            <div className="space-y-2">
-                                <h3 className="text-base font-semibold text-slate-700">Bank-Grade Security</h3>
-                                <p className="text-sm text-slate-600 max-w-xs">End-to-end encryption, 2FA, compliance with GDPR standards.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex items-center justify-center gap-6 max-w-md group cursor-pointer">
-                        <div className="p-6 group-hover:bg-orange-100 border border-transparent group-hover:border-orange-300 flex gap-4 rounded-xl transition-colors">
-                            <svg className="size-6 stroke-orange-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15V3" /><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="m7 10 5 5 5-5" /></svg>
-                            <div className="space-y-2">
-                                <h3 className="text-base font-semibold text-slate-700">Customizable Reports</h3>
-                                <p className="text-sm text-slate-600 max-w-xs">Export professional, audit-ready financial reports for tax or internal review.</p>
-                            </div>
-                        </div>
-                    </div>
+            <div className="flex flex-col items-center text-center mb-16">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 border border-green-200 text-green-700 text-sm font-medium mb-6">
+                    <Zap size={16} className="fill-green-700" />
+                    <span>Simple Process</span>
+                </div>
+                {/* Fallback styling in case Title component has issues */}
+                <div className="max-w-3xl">
+                    <Title title='Build your resume' description='Our streamlined process helps you create a professional resume in minutes with intelligent AI-powered tools and features.' />
                 </div>
             </div>
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-            
-                * {
-                    font-family: 'Poppins', sans-serif;
-                }
-            `}</style>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                {/* Visual Side */}
+                <div className="relative group perspective-1000">
+                    <div className="absolute -inset-4 bg-gradient-to-r from-green-300 to-blue-300 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+                    <img
+                        className="relative rounded-2xl shadow-2xl border border-slate-200 w-full object-cover transform transition-transform duration-500 hover:rotate-1"
+                        src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/group-image-1.png"
+                        alt="Platform Interface"
+                    />
+                </div>
+
+                {/* List Side */}
+                <div className="flex flex-col gap-5">
+
+                    {/* Feature 1 */}
+                    <div
+                        onMouseEnter={() => setHoveredIndex(0)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                        className={`p-6 rounded-2xl border transition-all duration-300 cursor-pointer ${hoveredIndex === 0 ? 'bg-white border-violet-200 shadow-xl shadow-violet-100 scale-[1.02]' : 'bg-transparent border-transparent hover:bg-slate-50'}`}
+                    >
+                        <div className="flex gap-5 items-start">
+                            <div className={`p-3 rounded-xl transition-colors ${hoveredIndex === 0 ? 'bg-violet-100 text-violet-600' : 'bg-slate-100 text-slate-500'}`}>
+                                <Activity size={24} />
+                            </div>
+                            <div>
+                                <h3 className={`text-lg font-bold mb-2 transition-colors ${hoveredIndex === 0 ? 'text-violet-900' : 'text-slate-800'}`}>Real-Time Analytics</h3>
+                                <p className="text-slate-600 leading-relaxed text-sm">Get instant insights into your finances with live dashboards that update as you work.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Feature 2 */}
+                    <div
+                        onMouseEnter={() => setHoveredIndex(1)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                        className={`p-6 rounded-2xl border transition-all duration-300 cursor-pointer ${hoveredIndex === 1 ? 'bg-white border-green-200 shadow-xl shadow-green-100 scale-[1.02]' : 'bg-transparent border-transparent hover:bg-slate-50'}`}
+                    >
+                        <div className="flex gap-5 items-start">
+                            <div className={`p-3 rounded-xl transition-colors ${hoveredIndex === 1 ? 'bg-green-100 text-green-600' : 'bg-slate-100 text-slate-500'}`}>
+                                <ShieldCheck size={24} />
+                            </div>
+                            <div>
+                                <h3 className={`text-lg font-bold mb-2 transition-colors ${hoveredIndex === 1 ? 'text-green-900' : 'text-slate-800'}`}>Bank-Grade Security</h3>
+                                <p className="text-slate-600 leading-relaxed text-sm">End-to-end encryption, 2FA, and strict compliance with global GDPR standards.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Feature 3 */}
+                    <div
+                        onMouseEnter={() => setHoveredIndex(2)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                        className={`p-6 rounded-2xl border transition-all duration-300 cursor-pointer ${hoveredIndex === 2 ? 'bg-white border-orange-200 shadow-xl shadow-orange-100 scale-[1.02]' : 'bg-transparent border-transparent hover:bg-slate-50'}`}
+                    >
+                        <div className="flex gap-5 items-start">
+                            <div className={`p-3 rounded-xl transition-colors ${hoveredIndex === 2 ? 'bg-orange-100 text-orange-600' : 'bg-slate-100 text-slate-500'}`}>
+                                <FileBarChart size={24} />
+                            </div>
+                            <div>
+                                <h3 className={`text-lg font-bold mb-2 transition-colors ${hoveredIndex === 2 ? 'text-orange-900' : 'text-slate-800'}`}>Customizable Reports</h3>
+                                <p className="text-slate-600 leading-relaxed text-sm">Export professional, audit-ready financial reports perfect for tax season or internal review.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     );
 }
