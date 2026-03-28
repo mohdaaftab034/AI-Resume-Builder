@@ -20,6 +20,7 @@ import api from './configs/api'
 import { login, setlLoading } from './app/features/authSlice'
 import { Toaster } from 'react-hot-toast'
 import { CheckCircle, Info, XCircle } from 'lucide-react'
+import AIChatbot from './components/AIChatbot'
 
 const App = () => {
 
@@ -68,6 +69,7 @@ const App = () => {
         }}
       />
       <ScrollToTop />
+      <AIChatbot />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='contact' element={<Contact />} />

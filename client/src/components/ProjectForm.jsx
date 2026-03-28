@@ -1,7 +1,12 @@
-import { FileText, FolderOpen, Layers, Plus, Trash2, Calendar, Link as LinkIcon } from 'lucide-react';
-import React from 'react'
+import { FileText, FolderOpen, Layers, Plus, Trash2, Calendar, Link as LinkIcon, Sparkles, Loader2 } from 'lucide-react';
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
+import api from '../configs/api';
+import toast from 'react-hot-toast';
 
 const ProjectForm = ({ data, onChange }) => {
+    const { token } = useSelector(state => state.auth);
+    const [refiningIndex, setRefiningIndex] = useState({ projectIdx: -1, pointIdx: -1 });
 
     const parseDescriptionToPoints = (description) => {
         if (!description) return [];
@@ -197,24 +202,57 @@ const ProjectForm = ({ data, onChange }) => {
                                                     {projectPoints.map((point, pointIndex) => (
                                                         <div key={pointIndex} className='flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-3'>
                                                             <div className='flex items-start gap-3 w-full min-w-0'>
-                                                                <span className='mt-3.5 size-1.5 rounded-full bg-primary-accent/50 shrink-0'></span>
-                                                                <input
-                                                                    type="text"
-                                                                    value={point}
-                                                                    onChange={(e) => updateProjectPoint(index, pointIndex, e.target.value)}
-                                                                    placeholder={`Point ${pointIndex + 1}: Describe impact, contribution, or result`}
-                                                                    className='w-full min-w-0 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder:text-slate-300 focus:ring-8 focus:ring-orange-500/5 focus:border-primary-accent outline-none transition-all shadow-sm'
-                                                                />
-                                                            </div>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => removeProjectPoint(index, pointIndex)}
-                                                                className='self-end sm:self-auto p-2.5 text-slate-400 hover:text-white hover:bg-red-500 rounded-lg transition-all sm:mt-1'
-                                                                title="Remove point"
-                                                            >
-                                                                <Trash2 className='size-4' />
-                                                            </button>
-                                                        </div>
+                                                                 <span className='mt-3.5 size-1.5 rounded-full bg-primary-accent/50 shrink-0'></span>
+                                                                 <div className="relative w-full">
+                                                                     <input
+                                                                         type="text"
+                                                                         value={point}
+                                                                         onChange={(e) => updateProjectPoint(index, pointIndex, e.target.value)}
+                                                                         placeholder={`Point ${pointIndex + 1}: Describe impact, contribution, or result`}
+                                                                         className='w-full min-w-0 pl-4 pr-12 py-4 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder:text-slate-300 focus:ring-8 focus:ring-orange-500/5 focus:border-primary-accent outline-none transition-all shadow-sm'
+                                                                     />
+                                                                     <button
+                                                                         type="button"
+                                                                         onClick={async () => {
+                                                                             if (!point.trim()) return toast.error("Enter some text first!");
+                                                                             setRefiningIndex({ projectIdx: index, pointIdx: pointIndex });
+                                                                             try {
+                                                                                 const response = await api.post('/api/ai/enhance-job-desc', {
+                                                                                     userContent: point,
+                                                                                     position: project.name || "Software Developer",
+                                                                                     company: project.type || "Project"
+                                                                                 }, {
+                                                                                     headers: { Authorization: token || localStorage.getItem('token') }
+                                                                                 });
+                                                                                 updateProjectPoint(index, pointIndex, response.data.enhancedContent);
+                                                                                 toast.success("Point refined!");
+                                                                             } catch (e) {
+                                                                                 toast.error("Failed to refine point");
+                                                                             } finally {
+                                                                                 setRefiningIndex({ projectIdx: -1, pointIdx: -1 });
+                                                                             }
+                                                                         }}
+                                                                         disabled={refiningIndex.projectIdx === index && refiningIndex.pointIdx === pointIndex}
+                                                                         className="absolute right-3 top-3.5 p-1.5 text-slate-300 hover:text-primary-accent hover:bg-orange-50 rounded-lg transition-all"
+                                                                         title="AI Refine"
+                                                                     >
+                                                                         {refiningIndex.projectIdx === index && refiningIndex.pointIdx === pointIndex ? (
+                                                                             <Loader2 className="size-4 animate-spin" />
+                                                                         ) : (
+                                                                             <Sparkles className="size-4" />
+                                                                         )}
+                                                                     </button>
+                                                                 </div>
+                                                             </div>
+                                                             <button
+                                                                 type="button"
+                                                                 onClick={() => removeProjectPoint(index, pointIndex)}
+                                                                 className='self-end sm:self-auto p-2.5 text-slate-400 hover:text-white hover:bg-red-500 rounded-lg transition-all sm:mt-1'
+                                                                 title="Remove point"
+                                                             >
+                                                                 <Trash2 className='size-4' />
+                                                             </button>
+                                                         </div>
                                                     ))}
                                                 </div>
 

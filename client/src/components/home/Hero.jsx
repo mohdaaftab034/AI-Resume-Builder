@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 import Navbar from '../Navbar';
 
 const Hero = () => {
@@ -36,20 +37,20 @@ const Hero = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-peach text-primary-accent text-sm font-semibold mb-8"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-50 text-primary-accent text-sm font-black mb-8 border border-orange-100"
                 >
-                    <span className="flex h-2 w-2 rounded-xl bg-primary-accent animate-pulse"></span>
-                    Powering 10,000+ Career Success Stories
+                    <Sparkles className="size-4 animate-pulse" />
+                    Generative Intelligence Workspace
                 </motion.div>
 
                 <motion.h1
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.1 }}
-                    className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-slate-900 tracking-tight leading-[1.05] max-w-5xl"
+                    className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 tracking-tight leading-[1.05] max-w-5xl"
                 >
-                    Build an AI-optimized <br className="hidden md:block" />
-                    <span className="text-primary-accent italic">Resume</span> that gets results.
+                    State-of-the-art <br className="hidden md:block" />
+                    <span className="text-primary-accent italic">Gemini 2.0 Power</span> for your career.
                 </motion.h1>
 
                 <motion.p

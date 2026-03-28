@@ -1,4 +1,4 @@
-import ai from "../configs/ai.js";
+import ai, { genAI } from "../configs/ai.js";
 import Resume from "../models/Resume.js";
 
 const fallbackEnhanceSummary = (text) => {
@@ -41,8 +41,8 @@ const fallbackEnhanceSummary = (text) => {
 };
 
 const getModelName = () => {
-    // Handles accidental quoted env values like 'gemini-2.5-flash'.
-    return (process.env.OPEN_AI_MODEL || 'gemini-2.5-flash').toString().trim().replace(/^['"]|['"]$/g, '');
+    // Handles accidental quoted env values like 'gemini-2.0-flash'.
+    return (process.env.OPEN_AI_MODEL || 'gemini-2.0-flash').toString().trim().replace(/^['"]|['"]$/g, '');
 };
 
 const withTimeout = (promise, timeoutMs) => {
@@ -52,19 +52,16 @@ const withTimeout = (promise, timeoutMs) => {
     ]);
 };
 
-const requestSummaryEnhancement = async (userContent, model) => {
-    const response = await withTimeout(ai.chat.completions.create({
-        model,
-        messages: [
-            { role: "system", content: "You are an expert in resume writing. Improve the given professional summary into 1-2 concise, ATS-friendly sentences that highlight impact, skills, and career direction. Return plain text only." },
-            {
-                role: "user",
-                content: userContent,
-            },
-        ],
-    }), 12000);
+const requestSummaryEnhancement = async (userContent, modelName) => {
+    const prompt = `You are an expert in resume writing. Improve the given professional summary into 1-2 concise, ATS-friendly sentences that highlight impact, skills, and career direction. Return plain text only.\n\nSummary: ${userContent}`;
+    
+    // Custom model instance if needed, or use the default 'ai'
+    const model = modelName ? ai.getGenerativeModel?.({ model: modelName }) || ai : ai;
+    
+    const result = await withTimeout(ai.generateContent(prompt), 12000);
+    const response = await result.response;
+    const enhanceContent = response.text().trim();
 
-    const enhanceContent = response?.choices?.[0]?.message?.content?.trim();
     if (!enhanceContent) {
         throw new Error('AI returned empty content');
     }
@@ -72,19 +69,13 @@ const requestSummaryEnhancement = async (userContent, model) => {
     return enhanceContent;
 };
 
-const requestJobDescriptionEnhancement = async (userContent, model) => {
-    const response = await withTimeout(ai.chat.completions.create({
-        model,
-        messages: [
-            { role: "system", content: "You are an expert in resume writing. Rewrite the job description into 1-2 ATS-friendly achievement-focused sentences. Use action verbs and include measurable impact when possible. Return plain text only." },
-            {
-                role: "user",
-                content: userContent,
-            },
-        ],
-    }), 12000);
+const requestJobDescriptionEnhancement = async (userContent, modelName) => {
+    const prompt = `You are an expert in resume writing. Rewrite the job description into 1-2 ATS-friendly achievement-focused sentences. Use action verbs and include measurable impact when possible. Return plain text only.\n\nDescription: ${userContent}`;
+    
+    const result = await withTimeout(ai.generateContent(prompt), 12000);
+    const response = await result.response;
+    const enhancedContent = response.text().trim();
 
-    const enhancedContent = response?.choices?.[0]?.message?.content?.trim();
     if (!enhancedContent) {
         throw new Error('AI returned empty content');
     }
@@ -514,21 +505,12 @@ const fallbackExtractResumeData = (resumeText = '', fallbackTitle = 'Imported Re
     }, fallbackTitle, joined);
 };
 
-const requestResumeExtraction = async ({ model, systemPrompt, userPrompt, useStructuredOutput }) => {
-    const payload = {
-        model,
-        messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt }
-        ]
-    };
+const requestResumeExtraction = async ({ model, systemPrompt, userPrompt }) => {
+    const prompt = `${systemPrompt}\n\n${userPrompt}`;
+    const result = await withTimeout(ai.generateContent(prompt), 25000);
+    const response = await result.response;
+    const rawContent = response.text();
 
-    if (useStructuredOutput) {
-        payload.response_format = { type: 'json_object' };
-    }
-
-    const response = await withTimeout(ai.chat.completions.create(payload), 18000);
-    const rawContent = response?.choices?.[0]?.message?.content;
     const parsed = extractJsonFromText(rawContent);
     if (!parsed) {
         throw new Error('AI extraction returned non-JSON output');
@@ -643,30 +625,14 @@ Rules:
 - Keep dates in YYYY-MM when possible.`;
 
     try {
-        const response = await withTimeout(ai.chat.completions.create({
-            model,
-            messages: [
-                { role: 'system', content: 'You complete missing structured resume fields. Return JSON only.' },
-                { role: 'user', content: completionPrompt }
-            ],
-            response_format: { type: 'json_object' }
-        }), 18000);
-
-        const parsed = extractJsonFromText(response?.choices?.[0]?.message?.content);
+        const result = await withTimeout(ai.generateContent(completionPrompt), 18000);
+        const response = await result.response;
+        const parsed = extractJsonFromText(response.text());
         if (!parsed) throw new Error('Missing-field completion returned invalid JSON');
         return parsed;
     } catch (error) {
-        const fallbackResponse = await withTimeout(ai.chat.completions.create({
-            model,
-            messages: [
-                { role: 'system', content: 'You complete missing structured resume fields. Return valid JSON only with no extra text.' },
-                { role: 'user', content: completionPrompt }
-            ]
-        }), 18000);
-
-        const parsed = extractJsonFromText(fallbackResponse?.choices?.[0]?.message?.content);
-        if (!parsed) throw error;
-        return parsed;
+        console.error("requestMissingFieldCompletion error:", error);
+        throw error;
     }
 };
 
@@ -1119,5 +1085,47 @@ export const analyzeAtsCompatibility = async (req, res) => {
         });
     } catch (error) {
         return res.status(500).json({ message: error.message });
+    }
+};
+
+// Controller for suggesting skills based on job title
+// POST: /api/ai/suggest-skills
+export const suggestSkills = async (req, res) => {
+    try {
+        const { title } = req.body;
+        if (!title) return res.status(400).json({ message: "Job title is required" });
+
+        const prompt = `You are a recruiter. Suggest the top 12 most relevant technical and soft skills for a "${title}" role. Return them as a comma-separated list only. No intro, no bullets.`;
+
+        const result = await withTimeout(ai.generateContent(prompt), 12000);
+        const response = await result.response;
+        const text = response.text().trim();
+        const skills = text.split(',').map(s => s.trim()).filter(Boolean);
+
+        res.status(200).json({ skills });
+    } catch (error) {
+        console.error("suggestSkills error:", error);
+        res.status(500).json({ message: "Failed to fetch skill suggestions" });
+    }
+};
+
+// Controller for generating a summary from experience
+// POST: /api/ai/generate-summary
+export const generateSummaryFromExperience = async (req, res) => {
+    try {
+        const { experience, title } = req.body;
+        if (!experience) return res.status(400).json({ message: "Experience data is required" });
+
+        const expString = experience.map(e => `${e.position} at ${e.company}: ${e.description}`).join('\n');
+        const prompt = `You are a career expert. Write a high-impact, 2-3 sentence resume summary for a "${title}" based on this experience:\n${expString}\n\nFocus on achievements and impact. Return plain text only.`;
+
+        const result = await withTimeout(ai.generateContent(prompt), 15000);
+        const response = await result.response;
+        const summary = response.text().trim();
+        
+        res.status(200).json({ summary });
+    } catch (error) {
+        console.error("generateSummaryFromExperience error:", error);
+        res.status(500).json({ message: "Failed to generate summary" });
     }
 };

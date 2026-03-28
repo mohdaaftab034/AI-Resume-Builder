@@ -170,11 +170,11 @@ const ResumeBuilder = () => {
   const renderForm = () => {
     switch (activeSection.id) {
       case 'personal': return <PersonalInfoForm data={resumeData.personal_info} onChange={(d) => setResumeData(p => ({ ...p, personal_info: d }))} />;
-      case 'summary': return <ProfessionalSummaryForm data={resumeData.professional_summary} onChange={(d) => setResumeData(p => ({ ...p, professional_summary: d }))} setResumeData={setResumeData} />;
+      case 'summary': return <ProfessionalSummaryForm data={resumeData.professional_summary} onChange={(d) => setResumeData(p => ({ ...p, professional_summary: d }))} setResumeData={setResumeData} resumeData={resumeData} />;
       case 'experience': return <ExperienceForm data={resumeData.experience} onChange={(d) => setResumeData(p => ({ ...p, experience: d }))} />;
       case 'education': return <EducationForm data={resumeData.education} onChange={(d) => setResumeData(p => ({ ...p, education: d }))} />;
       case 'projects': return <ProjectForm data={resumeData.project} onChange={(d) => setResumeData(p => ({ ...p, project: d }))} />;
-      case 'skills': return <SkillsForm data={resumeData.skills} onChange={(d) => setResumeData(p => ({ ...p, skills: d }))} />;
+      case 'skills': return <SkillsForm data={resumeData.skills} onChange={(d) => setResumeData(p => ({ ...p, skills: d }))} profession={resumeData.personal_info?.profession} />;
       case 'certificates': return <CertificatesForm data={resumeData.certificates} onChange={(d) => setResumeData(p => ({ ...p, certificates: d }))} />;
       default: return null;
     }

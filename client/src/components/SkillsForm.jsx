@@ -2,7 +2,13 @@ import { Lightbulb, Plus, Sparkles, Tag, X, Zap, Edit3, Check } from 'lucide-rea
 import React, { useState, useEffect } from 'react'
 import toast from 'react-hot-toast';
 
-const SkillsForm = ({ data, onChange }) => {
+import { useSelector } from 'react-redux';
+import api from '../configs/api';
+
+const SkillsForm = ({ data, onChange, profession }) => {
+    const { token } = useSelector(state => state.auth);
+    const [isSuggesting, setIsSuggesting] = useState(false);
+    const [suggestedSkills, setSuggestedSkills] = useState([]);
 
     // Ensure data is always an object format
     const skillsData = (data && typeof data === 'object' && !Array.isArray(data)) ? data : {};
@@ -11,6 +17,22 @@ const SkillsForm = ({ data, onChange }) => {
     const [newCategory, setNewCategory] = useState("");
     const [editingCategory, setEditingCategory] = useState(null);
     const [editingCategoryName, setEditingCategoryName] = useState("");
+
+    const fetchAISuggestions = async () => {
+        if (!profession) return toast.error("Please enter your profession in Personal Info first!");
+        try {
+            setIsSuggesting(true);
+            const response = await api.post('/api/ai/suggest-skills', { title: profession }, {
+                headers: { Authorization: token || localStorage.getItem('token') }
+            });
+            setSuggestedSkills(response.data.skills || []);
+            toast.success("AI found some great skills for you!");
+        } catch (error) {
+            toast.error("Failed to fetch suggestions");
+        } finally {
+            setIsSuggesting(false);
+        }
+    };
     
     // Initialize expanded categories - all categories start expanded
     const [expandedCategories, setExpandedCategories] = useState(() => {
@@ -151,13 +173,76 @@ const SkillsForm = ({ data, onChange }) => {
                 </div>
             </div>
 
+            {/* AI Assistant Section */}
+            <div className="relative overflow-hidden rounded-2xl bg-slate-900 p-8 text-white shadow-2xl group">
+                <div className="absolute top-0 right-0 -mt-12 -mr-12 w-48 h-48 bg-orange-500 opacity-20 rounded-full blur-3xl group-hover:opacity-30 transition-opacity duration-700"></div>
+                <div className="absolute -bottom-16 -left-16 w-40 h-40 bg-primary-accent opacity-10 rounded-full blur-2xl group-hover:opacity-20 transition-opacity duration-700"></div>
+
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-2.5 text-orange-400 font-black text-[10px] uppercase tracking-[0.3em] mb-1">
+                            <Sparkles className="size-4 animate-pulse" />
+                            Skill Scout AI
+                        </div>
+                        <h3 className="font-black text-2xl leading-tight tracking-tight">Don't miss critical keywords</h3>
+                        <p className="text-sm text-slate-300 max-w-sm font-medium leading-relaxed">
+                            {profession ? `Discover the top trending skills for ${profession} that hiring managers are looking for.` : "Enter your job title in Personal Info to get tailored skill suggestions."}
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                        <button
+                            onClick={fetchAISuggestions}
+                            disabled={isSuggesting || !profession}
+                            className='group shrink-0 flex items-center justify-center gap-3 px-8 py-4 bg-primary-accent text-white text-sm font-black rounded-xl hover:shadow-xl hover:shadow-orange-500/30 active:scale-95 disabled:opacity-30 transition-all'
+                        >
+                            {isSuggesting ? (
+                                <Loader2 className='size-5 animate-spin' />
+                            ) : (
+                                <Sparkles className='size-5 group-hover:rotate-12 transition-transform' />
+                            )}
+                            <span>{isSuggesting ? "Searching Stacks..." : "Discover Skills"}</span>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Suggested Skills List */}
+                {suggestedSkills.length > 0 && (
+                    <div className="mt-8 pt-6 border-t border-white/10 animate-in fade-in slide-in-from-top-4 duration-500">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Recommended for your profile:</p>
+                        <div className="flex flex-wrap gap-2">
+                            {suggestedSkills.map((skill, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => {
+                                        // Pick first category if available or create one called "Technical Skills"
+                                        const firstCat = Object.keys(skillsData)[0] || "Technical Skills";
+                                        if (!Object.keys(skillsData).length) {
+                                            const updated = { [firstCat]: [skill] };
+                                            onChange(updated);
+                                        } else {
+                                            addSkillToCategory(firstCat, skill);
+                                        }
+                                        setSuggestedSkills(prev => prev.filter(s => s !== skill));
+                                        toast.success(`Added ${skill}!`);
+                                    }}
+                                    className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold text-slate-300 hover:bg-white hover:text-black transition-all active:scale-95"
+                                >
+                                    + {skill}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+
             {/* Add New Category Section */}
             <div className="space-y-4 p-6 bg-slate-50 rounded-xl border border-slate-200">
-                <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">Add Category</h4>
+                <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest">Create New Category</h4>
                 <div className='flex flex-col sm:flex-row gap-3'>
                     <input
                         type="text"
-                        placeholder='e.g., Programming Languages, Tools & DevOps'
+                        placeholder='e.g., Programming Languages, Soft Skills'
                         className='flex-1 px-4 py-3 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-900 placeholder:text-slate-300 focus:ring-8 focus:ring-orange-500/5 focus:border-primary-accent outline-none transition-all shadow-sm'
                         onChange={(e) => setNewCategory(e.target.value)}
                         value={newCategory}
@@ -169,7 +254,7 @@ const SkillsForm = ({ data, onChange }) => {
                         className='px-6 py-3 bg-slate-900 text-white text-sm font-black rounded-lg hover:bg-slate-800 active:scale-95 disabled:opacity-30 transition-all'
                     >
                         <Plus className='size-4 inline mr-2' />
-                        Add
+                        Add Category
                     </button>
                 </div>
             </div>
