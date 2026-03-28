@@ -8,6 +8,7 @@ import ResumeBuilder from './pages/ResumeBuilder'
 import Preview from './pages/Preview'
 import Login from './pages/Login'
 import PublicResumeImport from './pages/PublicResumeImport'
+import ProgressTracker from './pages/ProgressTracker'
 import AdminDashboard from './pages/AdminDashboard'
 import TemplatesPage from './pages/TemplatesPage'
 import PrivacyPolicy from './pages/PrivacyPolicy'
@@ -74,6 +75,7 @@ const App = () => {
 
         <Route path='app' element={<Layout />}>
           <Route index element={<Dashboard />} />
+          <Route path='progress' element={<ProgressTracker />} />
           <Route path='builder/:resumeId' element={<ResumeBuilder />} />
           <Route path='public/:resumeId/use' element={<PublicResumeImport />} />
           <Route path='ats-analyzer' element={<AtsAnalyzer />} />

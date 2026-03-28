@@ -23,10 +23,10 @@ const Navbar = () => {
 
     const navLinks = [
         { name: 'Home', path: '/#home', icon: Home },
-        { name: 'Features', path: '/#features', icon: Zap },
+        { name: 'Resumes', path: '/app', icon: Layout },
+        { name: 'Progress Tracker', path: '/app/progress', icon: Zap },
         { name: 'ATS Analyzer', path: '/app/ats-analyzer', icon: ClipboardList },
         { name: 'Templates', path: '/templates', icon: Layout },
-        { name: 'FAQ', path: '/#faq', icon: HelpCircle },
         { name: 'Contact', path: '/contact', icon: Mail }
     ];
 

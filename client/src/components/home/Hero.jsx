@@ -75,7 +75,32 @@ const Hero = () => {
                         View Examples
                     </Link>
                 </motion.div>
+
+                {/* Visual Mockup Section */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1, delay: 0.7 }}
+                    className="mt-20 relative px-4 w-full max-w-6xl"
+                >
+                    <div className="absolute -inset-4 bg-orange-500/10 rounded-[2rem] blur-3xl opacity-50 z-0"></div>
+                    <div className="relative z-10 rounded-2xl overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] border-4 border-white/50 backdrop-blur-sm animate-float">
+                        <img 
+                            src="/Users/skmishra19/.gemini/antigravity/brain/1e3b9bb4-f2f4-47aa-9706-40f028becc03/resume_builder_mockup_1774675200233.png" 
+                            alt="Resume Builder Interface" 
+                            className="w-full object-cover"
+                        />
+                    </div>
+                </motion.div>
             </main>
+            
+            <style>{`
+                @keyframes float {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-20px); }
+                }
+                .animate-float { animation: float 6s ease-in-out infinite; }
+            `}</style>
 
             <style>{`
                 .text-primary-accent { color: #F95200; }
