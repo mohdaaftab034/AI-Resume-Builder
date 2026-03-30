@@ -170,11 +170,11 @@ const ResumeBuilder = () => {
   const renderForm = () => {
     switch (activeSection.id) {
       case 'personal': return <PersonalInfoForm data={resumeData.personal_info} onChange={(d) => setResumeData(p => ({ ...p, personal_info: d }))} />;
-      case 'summary': return <ProfessionalSummaryForm data={resumeData.professional_summary} onChange={(d) => setResumeData(p => ({ ...p, professional_summary: d }))} setResumeData={setResumeData} resumeData={resumeData} />;
+      case 'summary': return <ProfessionalSummaryForm data={resumeData.professional_summary} onChange={(d) => setResumeData(p => ({ ...p, professional_summary: d }))} setResumeData={setResumeData} />;
       case 'experience': return <ExperienceForm data={resumeData.experience} onChange={(d) => setResumeData(p => ({ ...p, experience: d }))} />;
       case 'education': return <EducationForm data={resumeData.education} onChange={(d) => setResumeData(p => ({ ...p, education: d }))} />;
       case 'projects': return <ProjectForm data={resumeData.project} onChange={(d) => setResumeData(p => ({ ...p, project: d }))} />;
-      case 'skills': return <SkillsForm data={resumeData.skills} onChange={(d) => setResumeData(p => ({ ...p, skills: d }))} profession={resumeData.personal_info?.profession} />;
+      case 'skills': return <SkillsForm data={resumeData.skills} onChange={(d) => setResumeData(p => ({ ...p, skills: d }))} />;
       case 'certificates': return <CertificatesForm data={resumeData.certificates} onChange={(d) => setResumeData(p => ({ ...p, certificates: d }))} />;
       default: return null;
     }
@@ -184,14 +184,14 @@ const ResumeBuilder = () => {
     <div className="resume-builder-page flex flex-col h-screen bg-slate-50 overflow-hidden">
 
       {/* Top Header */}
-      <header className="h-16 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between px-6 lg:px-8 shrink-0 z-30">
-        <div className="flex items-center gap-4 lg:gap-5">
-          <Link to="/app" className="group p-2 bg-slate-50 hover:bg-orange-50 rounded-lg text-slate-400 hover:text-primary-accent transition-all duration-300">
-            <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
+      <header className="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between px-6 lg:px-10 shrink-0 z-30">
+        <div className="flex items-center gap-4 lg:gap-6">
+          <Link to="/app" className="group p-2.5 bg-slate-50 hover:bg-orange-50 rounded-xl text-slate-400 hover:text-primary-accent transition-all duration-300">
+            <ArrowLeft className="size-5 group-hover:-translate-x-1 transition-transform" />
           </Link>
           <div>
-            <h1 className="font-black text-slate-900 text-base lg:text-lg tracking-tight truncate max-w-[150px] lg:max-w-xs">{resumeData.title || "Untitled Resume"}</h1>
-            <p className="hidden lg:block text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Auto-saving enabled</p>
+            <h1 className="font-black text-slate-900 text-lg lg:text-xl tracking-tight truncate max-w-[150px] lg:max-w-xs">{resumeData.title || "Untitled Resume"}</h1>
+            <p className="hidden lg:block text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Auto-saving enabled</p>
           </div>
         </div>
 
@@ -226,8 +226,8 @@ const ResumeBuilder = () => {
         <div className={`left-editor-panel w-full lg:w-[45%] xl:w-[40%] flex flex-col bg-white border-r border-slate-200 relative z-10 ${activeTab === 'editor' ? 'flex' : 'hidden lg:flex'}`}>
 
           {/* Stepper Navigation */}
-          <div className="px-4 lg:px-6 py-3 lg:py-4 overflow-x-auto border-b border-slate-50 no-scrollbar bg-slate-50/30">
-            <div className="flex items-center justify-center min-w-max gap-3 lg:gap-5">
+          <div className="px-6 lg:px-8 py-4 lg:py-6 overflow-x-auto border-b border-slate-50 no-scrollbar">
+            <div className="flex items-center justify-center min-w-max gap-4 lg:gap-6">
               {sections.map((sec, idx) => {
                 const isActive = activeSectionIndex === idx;
                 const isCompleted = activeSectionIndex > idx;
@@ -236,12 +236,12 @@ const ResumeBuilder = () => {
                   <button
                     key={sec.id}
                     onClick={() => setActiveSectionIndex(idx)}
-                    className={`group flex flex-col items-center gap-2 min-w-[3.5rem] lg:min-w-[4.5rem] transition-all duration-300 ${isActive ? 'scale-105' : 'opacity-50 hover:opacity-100'}`}
+                    className={`group flex flex-col items-center gap-3 min-w-[4rem] lg:min-w-[5rem] transition-all duration-300 ${isActive ? 'scale-110' : 'opacity-40 hover:opacity-100'}`}
                   >
-                    <div className={`size-10 lg:size-12 rounded-xl flex items-center justify-center transition-all duration-500 ${isActive ? 'bg-primary-accent text-white shadow-lg shadow-orange-500/20' : isCompleted ? 'bg-orange-50 text-primary-accent' : 'bg-white text-slate-300 border border-slate-100 shadow-sm'}`}>
-                      <Icon className="size-4 lg:size-5" />
+                    <div className={`size-12 lg:size-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${isActive ? 'bg-primary-accent text-white shadow-xl shadow-orange-500/30' : isCompleted ? 'bg-orange-50 text-primary-accent' : 'bg-slate-50 text-slate-400'}`}>
+                      <Icon className="size-5 lg:size-6" />
                     </div>
-                    <span className={`text-[9px] font-black uppercase tracking-wider ${isActive ? 'text-slate-900' : 'text-slate-400'}`}>{sec.name}</span>
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${isActive ? 'text-slate-900' : 'text-slate-400'}`}>{sec.name}</span>
                   </button>
                 )
               })}
@@ -267,13 +267,13 @@ const ResumeBuilder = () => {
           </div>
 
           {/* Navigation Footer */}
-          <div className="p-4 border-t border-slate-100 bg-white/80 backdrop-blur-md flex justify-between items-center z-20">
+          <div className="p-6 border-t border-slate-100 bg-white/80 backdrop-blur-md flex justify-between items-center z-20">
             <button
               onClick={() => setActiveSectionIndex(prev => Math.max(0, prev - 1))}
               disabled={activeSectionIndex === 0}
-              className="group flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-slate-500 hover:text-primary-accent hover:bg-orange-50 disabled:opacity-30 rounded-xl transition-all duration-300"
+              className="group flex items-center gap-2 px-6 py-3 text-sm font-bold text-slate-500 hover:text-primary-accent hover:bg-orange-50 disabled:opacity-30 rounded-xl transition-all duration-300"
             >
-              <ChevronLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
+              <ChevronLeft className="size-5 group-hover:-translate-x-1 transition-transform" />
               <span>Back</span>
             </button>
             <button
@@ -284,7 +284,7 @@ const ResumeBuilder = () => {
                 }
               }}
               disabled={isSaving}
-              className="flex items-center gap-2 px-6 py-2.5 text-sm font-black bg-primary-accent text-white hover:shadow-xl hover:shadow-orange-500/20 active:scale-95 disabled:opacity-50 rounded-xl shadow-lg transition-all duration-300"
+              className="flex items-center gap-2 px-8 py-3 text-sm font-black bg-primary-accent text-white hover:shadow-xl hover:shadow-orange-500/20 active:scale-95 disabled:opacity-50 rounded-xl shadow-lg transition-all duration-300"
             >
               {isSaving ? (
                 <>
@@ -294,7 +294,7 @@ const ResumeBuilder = () => {
               ) : (
                 <>
                   <span>{activeSectionIndex === sections.length - 1 ? 'Save Resume' : 'Save & Next'}</span>
-                  {activeSectionIndex < sections.length - 1 && <ChevronRight className="size-4" />}
+                  {activeSectionIndex < sections.length - 1 && <ChevronRight className="size-5" />}
                 </>
               )}
             </button>

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Resume Generator Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ["Georgia", "Cambria", "Times New Roman", "serif"],
+              sans: ["system-ui", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+            },
+            colors: {
+              ink: { 950: "#0f172a", 900: "#1e293b", 800: "#334155", 700: "#475569" },
+              paper: { 50: "#fff7ed", 100: "#ffedd5", 200: "#fed7aa" },
+              accent: { DEFAULT: "#f95200", light: "#fb7a3a" },
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body
+    class="min-h-full bg-paper-100 text-slate-800 antialiased transition-colors duration-200 dark:bg-ink-950 dark:text-slate-200"
+  >
+    <header
+      class="border-b border-paper-200/80 bg-white/80 backdrop-blur-md dark:border-ink-800 dark:bg-ink-900/90"
+    >
+      <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <div class="flex items-center gap-3">
+          <div>
+            <p class="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-white">
+              Resume Studio
+            </p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Profile-driven, ATS-aware drafts</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <a
+            href="/"
+            class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-ink-700 dark:bg-ink-800 dark:text-slate-200 dark:hover:bg-ink-700"
+            >Home</a
+          >
+          <button
+            type="button"
+            id="themeToggle"
+            class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-ink-700 dark:bg-ink-800 dark:text-slate-200 dark:hover:bg-ink-700"
+            aria-label="Toggle dark mode"
+          >
+            <span id="themeToggleIcon" class="text-base" aria-hidden="true"></span>
+            <span id="themeToggleLabel" class="hidden sm:inline">Theme</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+      <section
+        class="overflow-hidden rounded-2xl border border-paper-200 bg-white shadow-xl shadow-slate-900/5 dark:border-ink-800 dark:bg-ink-900 dark:shadow-black/40"
+      >
+        <div class="border-b border-paper-200 bg-gradient-to-br from-white to-paper-100 px-6 py-8 dark:border-ink-800 dark:from-ink-900 dark:to-ink-950 sm:px-8">
+          <h1 class="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
+            Build your resume from your links
+          </h1>
+          <p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            Add your LinkedIn and coding profile URLs. We pull public data where possible and draft a clean,
+            printable resume you can tweak before exporting to PDF.
+          </p>
+        </div>
+
+        <div class="px-6 py-8 sm:px-8">
+          <form id="profileForm" class="space-y-8">
+            <div>
+              <h2 class="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-accent dark:text-slate-300">
+                <span class="h-px flex-1 bg-paper-200 dark:bg-ink-700"></span>
+                Professional links
+                <span class="h-px flex-1 bg-paper-200 dark:bg-ink-700"></span>
+              </h2>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <label class="block">
+                  <span class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+                    >LinkedIn profile</span
+                  >
+                  <input
+                    type="url"
+                    id="linkedin"
+                    name="linkedin"
+                    autocomplete="url"
+                    placeholder="https://www.linkedin.com/in/yourname"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none ring-accent/0 transition placeholder:text-slate-400 focus:border-accent focus:ring-2 focus:ring-accent/20 dark:border-ink-700 dark:bg-ink-950 dark:text-white dark:placeholder:text-slate-500"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <h2 class="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-accent dark:text-slate-300">
+                <span class="h-px flex-1 bg-paper-200 dark:bg-ink-700"></span>
+                Coding profiles
+                <span class="h-px flex-1 bg-paper-200 dark:bg-ink-700"></span>
+              </h2>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <label class="block sm:col-span-2">
+                  <span class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+                    >GitHub</span
+                  >
+                  <input
+                    type="url"
+                    id="github"
+                    name="github"
+                    autocomplete="url"
+                    placeholder="https://github.com/username"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20 dark:border-ink-700 dark:bg-ink-950 dark:text-white"
+                  />
+                </label>
+                <label class="block">
+                  <span class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+                    >LeetCode</span
+                  >
+                  <input
+                    type="url"
+                    id="leetcode"
+                    name="leetcode"
+                    autocomplete="url"
+                    placeholder="https://leetcode.com/u/username"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20 dark:border-ink-700 dark:bg-ink-950 dark:text-white"
+                  />
+                </label>
+                <label class="block">
+                  <span class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+                    >CodeChef</span
+                  >
+                  <input
+                    type="url"
+                    id="codechef"
+                    name="codechef"
+                    autocomplete="url"
+                    placeholder="https://www.codechef.com/users/username"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20 dark:border-ink-700 dark:bg-ink-950 dark:text-white"
+                  />
+                </label>
+                <label class="block sm:col-span-2">
+                  <span class="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+                    >HackerRank</span
+                  >
+                  <input
+                    type="url"
+                    id="hackerrank"
+                    name="hackerrank"
+                    autocomplete="url"
+                    placeholder="https://www.hackerrank.com/username"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20 dark:border-ink-700 dark:bg-ink-950 dark:text-white"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <button
+                type="submit"
+                id="generateBtn"
+                class="inline-flex items-center justify-center rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-accent/25 transition hover:bg-accent-light focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 dark:focus:ring-offset-ink-900"
+              >
+                Generate resume
+              </button>
+              <p id="status" class="min-h-[1.25rem] text-sm text-slate-600 dark:text-slate-400"></p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="resultCard" class="mt-10 hidden">
+        <div
+          class="overflow-hidden rounded-2xl border border-paper-200 bg-white shadow-xl shadow-slate-900/5 dark:border-ink-800 dark:bg-ink-900 dark:shadow-black/40"
+        >
+          <div
+            class="flex flex-col gap-4 border-b border-paper-200 px-6 py-5 dark:border-ink-800 sm:flex-row sm:items-center sm:justify-between sm:px-8"
+          >
+            <h2 class="font-display text-xl font-semibold text-slate-900 dark:text-white">Generated resume</h2>
+            <div class="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                id="editToggleBtn"
+                class="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 transition hover:bg-slate-50 dark:border-ink-700 dark:bg-ink-800 dark:text-slate-200 dark:hover:bg-ink-700"
+              >
+                Edit resume
+              </button>
+              <button
+                type="button"
+                id="downloadPdfBtn"
+                class="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-white dark:text-ink-950 dark:hover:bg-paper-100"
+              >
+                Download PDF
+              </button>
+            </div>
+          </div>
+
+          <p id="editHint" class="hidden border-b border-amber-200/80 bg-amber-50 px-6 py-3 text-sm text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-100 sm:px-8">
+            Click any section below to edit text inline. Choose "Done editing" when finished, then download PDF.
+          </p>
+
+          <div class="px-6 py-6 sm:px-8">
+            <div id="extractSummaryBox" class="extract-summary-box mb-4 hidden rounded-xl"></div>
+            <div id="atsBox" class="ats-box mb-6 rounded-xl"></div>
+            <article id="resumeOutput" class="resume resume-sheet"></article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mx-auto max-w-5xl px-4 py-8 text-center text-xs text-slate-500 dark:text-slate-500 sm:px-6">
+      Uses public APIs and page metadata where available. LinkedIn may limit automated reads; your URL is always listed when provided.
+    </footer>
+    <div id="keyNotice" class="mx-auto max-w-5xl px-4 pb-6 text-xs text-orange-700 sm:px-6 hidden"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
