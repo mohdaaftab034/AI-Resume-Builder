@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
 import Navbar from '../Navbar';
 
 const Hero = () => {
@@ -37,20 +36,20 @@ const Hero = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-50 text-primary-accent text-sm font-black mb-8 border border-orange-100"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-peach text-primary-accent text-sm font-semibold mb-8"
                 >
-                    <Sparkles className="size-4 animate-pulse" />
-                    Generative Intelligence Workspace
+                    <span className="flex h-2 w-2 rounded-xl bg-primary-accent animate-pulse"></span>
+                    Powering 10,000+ Career Success Stories
                 </motion.div>
 
                 <motion.h1
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.1 }}
-                    className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 tracking-tight leading-[1.05] max-w-5xl"
+                    className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-slate-900 tracking-tight leading-[1.05] max-w-5xl"
                 >
-                    State-of-the-art <br className="hidden md:block" />
-                    <span className="text-primary-accent italic">Gemini 2.0 Power</span> for your career.
+                    Build an AI-optimized <br className="hidden md:block" />
+                    <span className="text-primary-accent italic">Resume</span> that gets results.
                 </motion.h1>
 
                 <motion.p
@@ -75,33 +74,11 @@ const Hero = () => {
                     <Link to="/templates" className="px-10 py-5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all active:scale-95">
                         View Examples
                     </Link>
-                </motion.div>
-
-                {/* Visual Mockup Section */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1, delay: 0.7 }}
-                    className="mt-20 relative px-4 w-full max-w-6xl"
-                >
-                    <div className="absolute -inset-4 bg-orange-500/10 rounded-[2rem] blur-3xl opacity-50 z-0"></div>
-                    <div className="relative z-10 rounded-2xl overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] border-4 border-white/50 backdrop-blur-sm animate-float">
-                        <img 
-                            src="/Users/skmishra19/.gemini/antigravity/brain/1e3b9bb4-f2f4-47aa-9706-40f028becc03/resume_builder_mockup_1774675200233.png" 
-                            alt="Resume Builder Interface" 
-                            className="w-full object-cover"
-                        />
-                    </div>
+                    <a href="/resume-studio/index.html" className="px-10 py-5 bg-brand-peach text-primary-accent font-bold rounded-xl hover:brightness-95 transition-all active:scale-95">
+                        Open Resume Studio
+                    </a>
                 </motion.div>
             </main>
-            
-            <style>{`
-                @keyframes float {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-20px); }
-                }
-                .animate-float { animation: float 6s ease-in-out infinite; }
-            `}</style>
 
             <style>{`
                 .text-primary-accent { color: #F95200; }

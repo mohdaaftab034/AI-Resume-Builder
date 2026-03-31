@@ -8,7 +8,6 @@ import ResumeBuilder from './pages/ResumeBuilder'
 import Preview from './pages/Preview'
 import Login from './pages/Login'
 import PublicResumeImport from './pages/PublicResumeImport'
-import ProgressTracker from './pages/ProgressTracker'
 import AdminDashboard from './pages/AdminDashboard'
 import TemplatesPage from './pages/TemplatesPage'
 import PrivacyPolicy from './pages/PrivacyPolicy'
@@ -20,7 +19,6 @@ import api from './configs/api'
 import { login, setlLoading } from './app/features/authSlice'
 import { Toaster } from 'react-hot-toast'
 import { CheckCircle, Info, XCircle } from 'lucide-react'
-import AIChatbot from './components/AIChatbot'
 
 const App = () => {
 
@@ -69,7 +67,6 @@ const App = () => {
         }}
       />
       <ScrollToTop />
-      <AIChatbot />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='contact' element={<Contact />} />
@@ -77,7 +74,6 @@ const App = () => {
 
         <Route path='app' element={<Layout />}>
           <Route index element={<Dashboard />} />
-          <Route path='progress' element={<ProgressTracker />} />
           <Route path='builder/:resumeId' element={<ResumeBuilder />} />
           <Route path='public/:resumeId/use' element={<PublicResumeImport />} />
           <Route path='ats-analyzer' element={<AtsAnalyzer />} />

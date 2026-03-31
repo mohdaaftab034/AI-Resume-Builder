@@ -1,10 +1,10 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const ai = new OpenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+    baseURL: process.env.OPEN_AI_BASE_URL,
+    timeout: 12000,
+    maxRetries: 1
+});
 
-const ai = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-if (!process.env.GEMINI_API_KEY) console.error("GEMINI_API_KEY IS MISSING IN SERVER CONFIG!");
-
-export { genAI };
 export default ai;

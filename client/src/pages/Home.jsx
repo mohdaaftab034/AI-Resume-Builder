@@ -7,11 +7,15 @@ import WhyChooseUs from '../components/home/WhyChooseUs'
 import Features from '../components/home/Features'
 import FAQ from '../components/home/FAQ'
 import Footer from '../components/home/Footer'
+import MarketDashboardDemo from '../components/home/MarketDashboardDemo'
+import PrototypeNotice from '../components/home/PrototypeNotice'
 
 const Home = () => {
   return (
     <div className="bg-white overflow-x-hidden selection:bg-orange-100 selection:text-primary-accent">
+      <PrototypeNotice />
       <Hero />
+      <MarketDashboardDemo />
       <Templates />
       <HowItWorks />
       <WhyChooseUs />

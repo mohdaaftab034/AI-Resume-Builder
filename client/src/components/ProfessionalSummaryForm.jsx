@@ -4,10 +4,9 @@ import { useSelector } from 'react-redux'
 import api from '../configs/api';
 import toast from 'react-hot-toast';
 
-const ProfessionalSummaryForm = ({ data, onChange, setResumeData, resumeData }) => {
+const ProfessionalSummaryForm = ({ data, onChange, setResumeData }) => {
     const { token } = useSelector(state => state.auth);
     const [isGenerating, setIsGenerating] = useState(false);
-    const [isAutoGenerating, setIsAutoGenerating] = useState(false);
 
     const generateSummary = async () => {
         const summaryText = data?.trim();
@@ -26,27 +25,6 @@ const ProfessionalSummaryForm = ({ data, onChange, setResumeData, resumeData }) 
         }
     }
 
-    const autoGenerateFromExperience = async () => {
-        if (!resumeData?.experience?.length) {
-            return toast.error("Add some work experience first to generate a summary!");
-        }
-        try {
-            setIsAutoGenerating(true);
-            const response = await api.post('/api/ai/generate-summary', { 
-                experience: resumeData.experience,
-                title: resumeData.personal_info?.profession || resumeData.title
-            }, {
-                headers: { Authorization: token || localStorage.getItem('token') }
-            })
-            setResumeData(prev => ({ ...prev, professional_summary: response.data.summary }))
-            toast.success("Summary generated from your experience!");
-        } catch (error) {
-            toast.error(error?.response?.data?.message || "Failed to generate summary");
-        } finally {
-            setIsAutoGenerating(false);
-        }
-    }
-
     return (
         <div className='flex flex-col gap-8 h-full font-sans'>
             <div className="space-y-2">
@@ -59,7 +37,7 @@ const ProfessionalSummaryForm = ({ data, onChange, setResumeData, resumeData }) 
                 <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-orange-500 opacity-20 rounded-full blur-3xl group-hover:opacity-40 transition-opacity duration-700"></div>
                 <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-primary-accent opacity-10 rounded-full blur-2xl group-hover:opacity-30 transition-opacity duration-700"></div>
 
-                <div className="relative z-10 flex flex-col xl:flex-row xl:items-center justify-between gap-6">
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="space-y-2">
                         <div className="flex items-center gap-2.5 text-orange-400 font-black text-[10px] uppercase tracking-[0.2em] mb-1">
                             <Sparkles className="size-4 animate-pulse" />
@@ -71,29 +49,18 @@ const ProfessionalSummaryForm = ({ data, onChange, setResumeData, resumeData }) 
                         </p>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <button
-                            onClick={autoGenerateFromExperience}
-                            disabled={isAutoGenerating || isGenerating}
-                            className='group flex items-center justify-center gap-3 px-6 py-4 bg-white/10 text-white text-xs font-black rounded-xl hover:bg-white/20 active:scale-95 disabled:opacity-30 transition-all border border-white/10'
-                        >
-                            {isAutoGenerating ? <Loader2 className='size-5 animate-spin text-orange-400' /> : <Sparkles className='size-5 text-orange-400' />}
-                            <span>Auto-Generate</span>
-                        </button>
-                        
-                        <button
-                            onClick={generateSummary}
-                            disabled={isGenerating || isAutoGenerating || !data}
-                            className='group shrink-0 flex items-center justify-center gap-3 px-8 py-4 bg-primary-accent text-white text-sm font-black rounded-xl hover:shadow-xl hover:shadow-orange-500/30 active:scale-95 disabled:opacity-30 disabled:scale-100 transition-all'
-                        >
-                            {isGenerating ? (
-                                <Loader2 className='size-5 animate-spin' />
-                            ) : (
-                                <Wand2 className='size-5 group-hover:rotate-12 transition-transform' />
-                            )}
-                            <span>{isGenerating ? "Refining..." : "Enhance Draft"}</span>
-                        </button>
-                    </div>
+                    <button
+                        onClick={generateSummary}
+                        disabled={isGenerating || !data}
+                        className='group shrink-0 flex items-center justify-center gap-3 px-8 py-4 bg-primary-accent text-white text-sm font-black rounded-xl hover:shadow-xl hover:shadow-orange-500/30 active:scale-95 disabled:opacity-30 disabled:scale-100 transition-all'
+                    >
+                        {isGenerating ? (
+                            <Loader2 className='size-5 animate-spin' />
+                        ) : (
+                            <Wand2 className='size-5 group-hover:rotate-12 transition-transform' />
+                        )}
+                        <span>{isGenerating ? "Magically Writing..." : "Enhance with AI"}</span>
+                    </button>
                 </div>
             </div>
 

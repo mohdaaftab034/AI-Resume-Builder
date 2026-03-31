@@ -4,13 +4,9 @@ import api from '../configs/api'
 import toast from 'react-hot-toast'
 import pdfToText from 'react-pdftotext'
 
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
-
 const initialJobDescription = '{{JOB_DESCRIPTION}}'
 
 const AtsAnalyzer = () => {
-  const location = useLocation();
   const [resumeFile, setResumeFile] = useState(null)
   const [extractedResumeText, setExtractedResumeText] = useState('')
   const [jobDescription, setJobDescription] = useState(initialJobDescription)
@@ -81,33 +77,7 @@ const AtsAnalyzer = () => {
         <div className="absolute top-[20%] left-[25%] w-[30%] h-[30%] rounded-full bg-[#F1DEF0] blur-[100px]"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 pt-24 pb-16 space-y-10">
-        {/* Premium Pill Tabs */}
-        <div className="flex bg-slate-100/50 p-1.5 rounded-2xl w-fit mb-12 backdrop-blur-md border border-slate-200/50">
-          {[
-            { name: 'My Resumes', path: '/app' },
-            { name: 'Progress Tracker', path: '/app/progress' },
-            { name: 'ATS Analyzer', path: '/app/ats-analyzer' }
-          ].map((tab) => {
-            const isActive = location.pathname === tab.path;
-            return (
-              <Link
-                key={tab.name}
-                to={tab.path}
-                className={`relative px-6 py-2.5 text-sm font-bold transition-all duration-300 rounded-xl ${isActive ? 'text-white' : 'text-slate-500 hover:text-slate-800'}`}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 bg-slate-900 rounded-xl shadow-lg shadow-slate-900/10"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-                  />
-                )}
-                <span className="relative z-10">{tab.name}</span>
-              </Link>
-            );
-          })}
-        </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 pt-32 pb-16 space-y-10">
         <div className="space-y-3">
           <p className="text-xs font-black uppercase tracking-[0.2em] text-primary-accent flex items-center gap-2">
             <Sparkles className="size-4" />
