@@ -31,7 +31,7 @@ const resumeSchema = new mongoose.Schema({
             location: { type: String, default: '' },
         }
     ],
-    project: [
+    project: [ 
         {
             name: { type: String },
             type: { type: String },
